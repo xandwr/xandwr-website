@@ -63,7 +63,12 @@
     --theme-body-bg-opacity: 0;
 
     --background0: var(--theme-bg);
+    --background1: color-mix(in srgb, var(--theme-fg) 8%, var(--theme-bg));
+    --background2: color-mix(in srgb, var(--theme-fg) 14%, var(--theme-bg));
+    --background3: color-mix(in srgb, var(--theme-fg) 22%, var(--theme-bg));
     --foreground0: var(--theme-fg);
+    --foreground1: var(--theme-fg);
+    --foreground2: var(--theme-muted);
     --font-family: var(--theme-font);
     --font-size: 1rem;
     --line-height: 1.5;
@@ -71,13 +76,13 @@
   }
 
   [data-theme="normal-dark"] {
-    --theme-fg: #e5e5e5;
+    --theme-fg: #f4f4f5;
     --theme-bg: #0f0f10;
-    --theme-muted: #9ca3af;
-    --theme-rule: #2e2e32;
-    --theme-primary: #fafafa;
-    --theme-secondary: #a1a1aa;
-    --theme-tertiary: #71717a;
+    --theme-muted: #a1a1aa;
+    --theme-rule: #3f3f46;
+    --theme-primary: #ffffff;
+    --theme-secondary: #d4d4d8;
+    --theme-tertiary: #a1a1aa;
 
     --theme-font: var(--font-sans);
     --theme-font-special: var(--font-sans);
@@ -86,6 +91,16 @@
     --theme-body-shadow: none;
     --theme-body-border-opacity: 0;
     --theme-body-bg-opacity: 0;
+
+    --background0: var(--theme-bg);
+    --background1: color-mix(in srgb, var(--theme-fg) 8%, var(--theme-bg));
+    --background2: color-mix(in srgb, var(--theme-fg) 14%, var(--theme-bg));
+    --background3: color-mix(in srgb, var(--theme-fg) 22%, var(--theme-bg));
+    --foreground0: var(--theme-fg);
+    --foreground1: var(--theme-fg);
+    --foreground2: var(--theme-muted);
+    --font-family: var(--theme-font);
+    --box-border-color: var(--theme-rule);
   }
 
   [data-theme="amber-phosphor"] {
@@ -104,13 +119,33 @@
     --theme-body-shadow: 0 20px 25px -5px color-mix(in srgb, var(--theme-secondary) 50%, transparent);
     --theme-body-border-opacity: 1;
     --theme-body-bg-opacity: 0.1;
+
+    --background0: var(--theme-bg);
+    --background1: color-mix(in srgb, var(--theme-fg) 8%, var(--theme-bg));
+    --background2: color-mix(in srgb, var(--theme-fg) 14%, var(--theme-bg));
+    --background3: color-mix(in srgb, var(--theme-fg) 22%, var(--theme-bg));
+    --foreground0: var(--theme-fg);
+    --foreground1: var(--theme-fg);
+    --foreground2: var(--theme-muted);
+    --font-family: var(--theme-font);
+    --box-border-color: var(--theme-rule);
   }
 }
 
-html {
+html,
+html body {
   font-family: var(--theme-font);
   color: var(--theme-fg);
   background: var(--theme-bg);
+}
+
+html[data-theme="normal-light"],
+html[data-theme="normal-light"] body,
+html[data-theme="normal-dark"],
+html[data-theme="normal-dark"] body,
+html[data-theme="normal-light"] :is(p, h1, h2, h3, h4, h5, h6, li, blockquote, pre, input, button, textarea),
+html[data-theme="normal-dark"] :is(p, h1, h2, h3, h4, h5, h6, li, blockquote, pre, input, button, textarea) {
+  font-family: var(--font-sans);
 }
 
 html[data-theme="amber-phosphor"] {
