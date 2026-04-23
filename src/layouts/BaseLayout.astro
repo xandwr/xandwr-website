@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { ClientRouter } from "astro:transitions";
 
 interface Props {
   title?: string;
@@ -20,11 +21,12 @@ const fullTitle = title ? `${title} — xandwr` : "xandwr";
     <title>{fullTitle}</title>
     {description && <meta name="description" content={description} />}
     <meta name="generator" content={Astro.generator} />
+    <ClientRouter />
   </head>
   <body
-    class="flex flex-col justify-between bg-black/20 h-screen max-w-xl mx-auto px-8 py-8 min-h-screen"
+    class="flex flex-col justify-between border-x shadow-xl shadow-black border-fg/20 h-screen max-w-xl mx-auto px-8 py-8 min-h-screen"
   >
-    <canvas id="bg-canvas"></canvas>
+    <canvas id="bg-canvas" transition:persist></canvas>
 
     <header class="h-min">
       <nav class="text-muted text-sm flex flex-col gap-y-2">
@@ -57,10 +59,16 @@ const fullTitle = title ? `${title} — xandwr` : "xandwr";
       import vertSrc from "../shaders/background.vert.glsl?raw";
       import fragSrc from "../shaders/background.frag.glsl?raw";
 
-      const canvas = document.getElementById("bg-canvas") as HTMLCanvasElement;
-      const gl = canvas.getContext("webgl2", { antialias: false, premultipliedAlpha: false });
+      const canvas = document.getElementById("bg-canvas") as HTMLCanvasElement & {
+        __shaderInit?: boolean;
+      };
+      const gl = canvas?.__shaderInit
+        ? null
+        : canvas?.getContext("webgl2", { antialias: false, premultipliedAlpha: false });
 
       if (gl) {
+        canvas.__shaderInit = true;
+
         const compile = (type: number, src: string) => {
           const s = gl.createShader(type)!;
           gl.shaderSource(s, src);
