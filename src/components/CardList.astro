@@ -22,10 +22,14 @@ const { items, emptyText = "the empty void of nothing" } = Astro.props;
       {items.map((item) => (
         <a
           href={item.href}
-          class="flex flex-col gap-1 border-2 border-rule/40 py-4 px-3 rounded-lg hover:bg-fg/5 transition-colors no-underline"
+          class="card-link flex flex-col gap-1 border-2 border-rule/40 py-4 px-3 rounded-lg hover:bg-fg/5 transition-colors"
         >
           <div class="flex items-baseline justify-between gap-4">
-            <span class="font-semibold">{item.title}</span>
+            <div class="flex flex-col items-start justify-between h-full w-full">
+              <span class="font-semibold">{item.title}</span>
+              <p class="text-muted text-sm m-0">{item.description}</p>
+            </div>
+
             <time
               class="text-muted text-xs shrink-0"
               datetime={item.date.toISOString()}
@@ -33,9 +37,18 @@ const { items, emptyText = "the empty void of nothing" } = Astro.props;
               {item.date.toISOString().slice(0, 10)}
             </time>
           </div>
-          <p class="text-muted text-sm m-0">{item.description}</p>
         </a>
       ))}
     </div>
   )
 }
+
+<style>
+  .card-link,
+  .card-link:hover,
+  .card-link:focus,
+  .card-link:focus-visible,
+  .card-link:active {
+    text-decoration: none;
+  }
+</style>
