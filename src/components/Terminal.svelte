@@ -29,21 +29,20 @@
 <style>
   .terminal {
     font-family: var(--font-mono);
-    font-size: 0.9rem;
-    line-height: 1.5;
+    font-size: 0.3rem;
+    line-height: 0.5;
     color: var(--color-fg);
     background: var(--color-bg);
-    padding: 1rem 1.25rem;
+    padding: 0.1rem 0.25rem;
     margin: 0;
     border-radius: 2px;
     border: 1px solid var(--color-rule);
     overflow: auto;
-    white-space: pre-wrap;
-    height: 100%;
-    word-break: break-word;
+    overflow: hidden;
   }
 
   .line {
     min-height: 1.5em;
+    white-space: pre;
   }
 </style>

@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Terminal from "../components/Terminal.svelte";
+import { signature } from "../data/signature";
 
 export const prerender = true;
 
@@ -12,6 +13,6 @@ const posts = (await getCollection("posts", ({ data }) => !data.draft))
 
 <BaseLayout description="xander">
   <div class="h-full w-full">
-    <Terminal client:load />
+    <Terminal client:load initial={signature} />
   </div>
 </BaseLayout>
