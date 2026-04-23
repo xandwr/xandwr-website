@@ -16,6 +16,7 @@
     --font-size: 1rem;
     --line-height: 1.5;
     --box-border-color: #6a4400;
+    
   }
 }
 
@@ -63,6 +64,7 @@ html {
   background: var(--color-bg);
   -webkit-font-smoothing: none;
   -moz-osx-font-smoothing: auto;
+  
 }
 
 #bg-canvas {
@@ -78,7 +80,7 @@ html {
 }
 
 a {
-  text-decoration: underline;
+  text-decoration: none;
   text-underline-offset: 0.2em;
   text-decoration-thickness: 1px;
 }
