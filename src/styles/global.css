@@ -25,6 +25,17 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+#bg-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  display: block;
+  filter: blur(30px);
+}
+
 a {
   text-decoration: underline;
   text-underline-offset: 0.2em;
