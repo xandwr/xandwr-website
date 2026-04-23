@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@theme {
+  --font-mono: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+  --color-fg: #1a1a1a;
+  --color-bg: #fafaf7;
+  --color-muted: #6a6a6a;
+  --color-rule: #aaaaa4;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-fg: #cef3e5;
+    --color-bg: #1b161d;
+    --color-muted: #7aa4aa;
+    --color-rule: #e0dddd;
+  }
+}
+
+html {
+  font-family: var(--font-mono);
+  color: var(--color-fg);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+a:hover { text-decoration-thickness: 2px; }
+
+h1, h2, h3 { font-weight: 600; line-height: 1.25; }
+h1 { font-size: 1.35rem; margin: 2rem 0 0.75rem; }
+h2 { font-size: 1.15rem; margin: 2rem 0 0.75rem; }
+h3 { font-size: 1rem;    margin: 2rem 0 0.75rem; }
+
+p, ul, ol, blockquote, pre { margin: 0 0 1rem; }
+ul, ol { padding-left: 1.5rem; }
+
+blockquote {
+  border-left: 2px solid var(--color-rule);
+  padding-left: 1rem;
+  color: var(--color-muted);
+}
+
+code {
+  font-family: inherit;
+  font-size: 0.95em;
+  background: var(--color-rule);
+  padding: 0.1em 0.3em;
+  border-radius: 2px;
+}
+
+pre {
+  background: var(--color-rule);
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+  border-radius: 2px;
+}
+
+pre code { background: none; padding: 0; }
+
+img, video { max-width: 100%; height: auto; }

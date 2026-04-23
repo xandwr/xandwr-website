@@ -1,0 +1,16 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+export const prerender = true;
+
+const posts = (await getCollection("posts", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.created.getTime() - a.data.created.getTime())
+  .slice(0, 10);
+---
+
+<BaseLayout description="Xander Pickering — computer stuff.">
+  <div class="h-full w-full">
+    { /* TODO: content here lmao */ }
+  </div>
+</BaseLayout>
