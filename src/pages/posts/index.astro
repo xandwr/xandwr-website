@@ -15,7 +15,7 @@ const posts = (await getCollection("posts", ({ data }) => !data.draft))
   }));
 ---
 
-<BaseLayout title="posts" description="All posts by Xander.">
+<BaseLayout title="posts" description="xander's writing">
   <h1>Posts</h1>
   <CardList items={posts} />
 </BaseLayout>

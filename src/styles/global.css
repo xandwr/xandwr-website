@@ -12,9 +12,23 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "DigitRegular";
+  src: url("/fonts/digit-regular.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DigitBold";
+  src: url("/fonts/digit-bold.ttf") format("truetype");
+  font-display: swap;
+}
+
 @theme {
   --font-mono: "DOS", ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
   --font-special: "CRT", ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+  --font-digit-regular: "DigitRegular", monospace;
+  --font-digit-bold: "DigitBold", monospace;
   --color-fg: #ffb000;
   --color-bg: #0a0604;
   --color-muted: #a86b00;
@@ -33,7 +47,9 @@ html {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body::after { animation: none; }
+  body::after {
+    animation: none;
+  }
 }
 
 #bg-canvas {
@@ -53,15 +69,45 @@ a {
   text-underline-offset: 0.2em;
   text-decoration-thickness: 1px;
 }
-a:hover { text-decoration-thickness: 2px; }
 
-h1, h2, h3 { font-weight: 600; line-height: 1.25; }
-h1 { font-size: 1.35rem; margin: 2rem 0 0.75rem; }
-h2 { font-size: 1.15rem; margin: 2rem 0 0.75rem; }
-h3 { font-size: 1rem;    margin: 2rem 0 0.75rem; }
+a:hover {
+  text-decoration-thickness: 2px;
+}
 
-p, ul, ol, blockquote, pre { margin: 0 0 1rem; }
-ul, ol { padding-left: 1.5rem; }
+h1,
+h2,
+h3 {
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+h1 {
+  font-size: 1.75rem;
+  margin: 0.5rem 0 0.5rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin: 0.5rem 0 0.5rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+  margin: 0.5rem 0 0.5rem;
+}
+
+p,
+ul,
+ol,
+blockquote,
+pre {
+  margin: 0 0 1rem;
+}
+
+ul,
+ol {
+  padding-left: 1.5rem;
+}
 
 blockquote {
   border-left: 2px solid var(--color-rule);
@@ -84,6 +130,13 @@ pre {
   border-radius: 2px;
 }
 
-pre code { background: none; padding: 0; }
+pre code {
+  background: none;
+  padding: 0;
+}
 
-img, video { max-width: 100%; height: auto; }
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
