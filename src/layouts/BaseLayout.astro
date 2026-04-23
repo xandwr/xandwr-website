@@ -23,9 +23,20 @@ const fullTitle = title ? `${title} — xandwr` : "xandwr";
     {description && <meta name="description" content={description} />}
     <meta name="generator" content={Astro.generator} />
     <ClientRouter />
+    <script is:inline>
+      (function () {
+        const valid = ["normal-light", "normal-dark", "amber-phosphor"];
+        let theme = null;
+        try {
+          theme = localStorage.getItem("theme");
+        } catch (_) {}
+        if (!valid.includes(theme)) theme = "normal-light";
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
   </head>
   <body
-    class="max-w-4xl flex flex-col justify-between border-x bg-primary/10 shadow-xl shadow-secondary/50 border-secondary h-screen mx-auto px-8 py-8 min-h-screen"
+    class="max-w-4xl site-frame flex flex-col justify-between h-screen mx-auto px-8 py-8 min-h-screen"
   >
     <canvas id="bg-canvas" transition:persist></canvas>
 
@@ -47,18 +58,45 @@ const fullTitle = title ? `${title} — xandwr` : "xandwr";
       </p>
     </footer>
 
+    <style>
+      .site-frame {
+        border-left: 1px solid color-mix(in srgb, var(--theme-secondary) calc(var(--theme-body-border-opacity) * 100%), transparent);
+        border-right: 1px solid color-mix(in srgb, var(--theme-secondary) calc(var(--theme-body-border-opacity) * 100%), transparent);
+        background: color-mix(in srgb, var(--theme-primary) calc(var(--theme-body-bg-opacity) * 100%), transparent);
+        box-shadow: var(--theme-body-shadow);
+      }
+    </style>
+
     <script>
       import vertSrc from "../shaders/background.vert.glsl?raw";
       import fragSrc from "../shaders/background.frag.glsl?raw";
 
-      const canvas = document.getElementById("bg-canvas") as HTMLCanvasElement & {
+      type ShaderCanvas = HTMLCanvasElement & {
         __shaderInit?: boolean;
+        __shaderStop?: () => void;
       };
-      const gl = canvas?.__shaderInit
-        ? null
-        : canvas?.getContext("webgl2", { antialias: false, premultipliedAlpha: false });
 
-      if (gl) {
+      function initShader() {
+        const canvas = document.getElementById("bg-canvas") as ShaderCanvas | null;
+        if (!canvas) return;
+
+        const theme = document.documentElement.getAttribute("data-theme");
+        const wantsShader = theme === "amber-phosphor";
+
+        if (!wantsShader) {
+          if (canvas.__shaderStop) canvas.__shaderStop();
+          canvas.__shaderInit = false;
+          return;
+        }
+
+        if (canvas.__shaderInit) return;
+
+        const gl = canvas.getContext("webgl2", {
+          antialias: false,
+          premultipliedAlpha: false,
+        });
+        if (!gl) return;
+
         canvas.__shaderInit = true;
 
         const compile = (type: number, src: string) => {
@@ -105,15 +143,28 @@ const fullTitle = title ? `${title} — xandwr` : "xandwr";
         addEventListener("resize", resize);
 
         const start = performance.now();
+        let rafId = 0;
+        let stopped = false;
+
         const frame = () => {
+          if (stopped) return;
           resize();
           gl.uniform2f(uRes, canvas.width, canvas.height);
           gl.uniform1f(uTime, (performance.now() - start) / 1000);
           gl.drawArrays(gl.TRIANGLES, 0, 3);
-          requestAnimationFrame(frame);
+          rafId = requestAnimationFrame(frame);
         };
-        requestAnimationFrame(frame);
+        rafId = requestAnimationFrame(frame);
+
+        canvas.__shaderStop = () => {
+          stopped = true;
+          cancelAnimationFrame(rafId);
+        };
       }
+
+      initShader();
+      document.addEventListener("astro:after-swap", initShader);
+      document.addEventListener("theme:changed", initShader);
     </script>
   </body>
 </html>

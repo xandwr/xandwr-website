@@ -3,23 +3,6 @@
 
 @import '@webtui/css';
 
-@layer base {
-  :root {
-    --background0: #0a0604;
-    --background1: #150a04;
-    --background2: #1f0e05;
-    --background3: #2a1306;
-    --foreground0: #ffb000;
-    --foreground1: #b88200;
-    --foreground2: #a86b00;
-    --font-family: "DOS", ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
-    --font-size: 1rem;
-    --line-height: 1.5;
-    --box-border-color: #6a4400;
-    
-  }
-}
-
 @font-face {
   font-family: "CRT";
   src: url("/fonts/crt.otf") format("opentype");
@@ -45,26 +28,104 @@
 }
 
 @theme {
-  --font-mono: "DOS", ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
-  --font-special: "CRT", ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+  --font-mono: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-special: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
   --font-digit-regular: "DigitRegular", monospace;
   --font-digit-bold: "DigitBold", monospace;
-  --color-fg: #ffb000;
-  --color-bg: #0a0604;
-  --color-muted: #a86b00;
-  --color-rule: #6a4400;
-  --color-primary: #ffcc33;
-  --color-secondary: #ff7a00;
-  --color-tertiary: #b88200;
+
+  --color-fg: var(--theme-fg);
+  --color-bg: var(--theme-bg);
+  --color-muted: var(--theme-muted);
+  --color-rule: var(--theme-rule);
+  --color-primary: var(--theme-primary);
+  --color-secondary: var(--theme-secondary);
+  --color-tertiary: var(--theme-tertiary);
+}
+
+@layer base {
+  :root,
+  [data-theme="normal-light"] {
+    --theme-fg: #1a1a1a;
+    --theme-bg: #fafafa;
+    --theme-muted: #6b7280;
+    --theme-rule: #d4d4d8;
+    --theme-primary: #0f172a;
+    --theme-secondary: #334155;
+    --theme-tertiary: #64748b;
+
+    --theme-font: var(--font-sans);
+    --theme-font-special: var(--font-sans);
+    --theme-font-smoothing: antialiased;
+    --theme-bg-canvas-display: none;
+    --theme-body-shadow: none;
+    --theme-body-border-opacity: 0;
+    --theme-body-bg-opacity: 0;
+
+    --background0: var(--theme-bg);
+    --foreground0: var(--theme-fg);
+    --font-family: var(--theme-font);
+    --font-size: 1rem;
+    --line-height: 1.5;
+    --box-border-color: var(--theme-rule);
+  }
+
+  [data-theme="normal-dark"] {
+    --theme-fg: #e5e5e5;
+    --theme-bg: #0f0f10;
+    --theme-muted: #9ca3af;
+    --theme-rule: #2e2e32;
+    --theme-primary: #fafafa;
+    --theme-secondary: #a1a1aa;
+    --theme-tertiary: #71717a;
+
+    --theme-font: var(--font-sans);
+    --theme-font-special: var(--font-sans);
+    --theme-font-smoothing: antialiased;
+    --theme-bg-canvas-display: none;
+    --theme-body-shadow: none;
+    --theme-body-border-opacity: 0;
+    --theme-body-bg-opacity: 0;
+  }
+
+  [data-theme="amber-phosphor"] {
+    --theme-fg: #ffb000;
+    --theme-bg: #0a0604;
+    --theme-muted: #a86b00;
+    --theme-rule: #6a4400;
+    --theme-primary: #ffcc33;
+    --theme-secondary: #ff7a00;
+    --theme-tertiary: #b88200;
+
+    --theme-font: "DOS", ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+    --theme-font-special: "CRT", ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+    --theme-font-smoothing: none;
+    --theme-bg-canvas-display: block;
+    --theme-body-shadow: 0 20px 25px -5px color-mix(in srgb, var(--theme-secondary) 50%, transparent);
+    --theme-body-border-opacity: 1;
+    --theme-body-bg-opacity: 0.1;
+  }
 }
 
 html {
-  font-family: var(--font-mono);
-  color: var(--color-fg);
-  background: var(--color-bg);
+  font-family: var(--theme-font);
+  color: var(--theme-fg);
+  background: var(--theme-bg);
+}
+
+html[data-theme="amber-phosphor"] {
   -webkit-font-smoothing: none;
   -moz-osx-font-smoothing: auto;
-  
+}
+
+html[data-theme="normal-light"],
+html[data-theme="normal-dark"] {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-special {
+  font-family: var(--theme-font-special);
 }
 
 #bg-canvas {
@@ -74,7 +135,7 @@ html {
   height: 100vh;
   z-index: -1;
   pointer-events: none;
-  display: block;
+  display: var(--theme-bg-canvas-display);
   filter: blur(0.33vw);
   opacity: 30%;
 }
@@ -86,6 +147,7 @@ a {
 }
 
 a:hover {
+  text-decoration: underline;
   text-decoration-thickness: 2px;
 }
 

@@ -37,15 +37,39 @@ const links = [
     </div>
   </nav>
 
-  <div class="flex flex-col  items-start justify-start bg-bg/33 border border-primary/50 py-2 px-6 rounded-xl h-min">
-    <h1 class="text-secondary">Site Theme:</h1>
-    <select name="theme-selector" id="theme-selector" class="text-primary">
-      <option value="normal-light">Normal - Light</option>
-      <option value="normal-dark">Normal - Dark</option>
+  <div
+    class="flex flex-col items-start justify-start bg-bg/33 border border-primary/50 py-2 px-6 rounded-xl h-min"
+  >
+    <label for="theme-selector" class="text-secondary">Site Theme:</label>
+    <select name="theme-selector" id="theme-selector" class="text-primary bg-transparent">
+      <option value="normal-light">Normal — Light</option>
+      <option value="normal-dark">Normal — Dark</option>
       <option value="amber-phosphor">Amber Phosphor</option>
     </select>
   </div>
 </header>
+
+<script>
+  function wireThemeSelector() {
+    const sel = document.getElementById("theme-selector") as HTMLSelectElement | null;
+    if (!sel) return;
+
+    const current = document.documentElement.getAttribute("data-theme") || "normal-light";
+    sel.value = current;
+
+    sel.onchange = () => {
+      const next = sel.value;
+      document.documentElement.setAttribute("data-theme", next);
+      try {
+        localStorage.setItem("theme", next);
+      } catch (_) {}
+      document.dispatchEvent(new CustomEvent("theme:changed", { detail: next }));
+    };
+  }
+
+  wireThemeSelector();
+  document.addEventListener("astro:after-swap", wireThemeSelector);
+</script>
 
 <style>
   .nav-link,
