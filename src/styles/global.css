@@ -1,4 +1,21 @@
 @import "tailwindcss";
+@layer base, utils, components;
+
+@import '@webtui/css';
+
+@layer base {
+  :root {
+    --background0: #0a0604;
+    --background1: #150a04;
+    --background2: #1f0e05;
+    --background3: #2a1306;
+    --foreground0: #ffb000;
+    --foreground1: #b88200;
+    --foreground2: #a86b00;
+    --font-family: "DOS", ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+    --box-border-color: #6a4400;
+  }
+}
 
 @font-face {
   font-family: "CRT";
