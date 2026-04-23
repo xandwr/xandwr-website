@@ -10,51 +10,113 @@ const links = [
 ];
 ---
 
-<header class="h-min flex flex-row">
-  <nav class="w-full text-muted text-sm flex flex-col gap-y-2">
-    <a
-      href="/"
-      class="nav-link text-4xl tracking-wide font-lighter text-fg font-special"
-      >xandwr</a
+<header class="h-min">
+  <div class="flex flex-row items-start justify-between gap-x-4">
+    <nav class="text-muted text-sm flex flex-col gap-y-2 min-w-0">
+      <a
+        href="/"
+        class="nav-link text-4xl tracking-wide font-lighter text-fg font-special"
+        >xandwr</a
+      >
+      <div class="hidden sm:flex gap-x-4 text-lg">
+        {
+          links.map((link, i) => (
+            <>
+              <a
+                href={link.href}
+                class:list={[
+                  "nav-link",
+                  isActive(link.href) ? "text-primary" : "text-muted",
+                ]}
+              >
+                {link.label}
+              </a>
+              {i < links.length - 1 && <span class="text-muted">/</span>}
+            </>
+          ))
+        }
+      </div>
+    </nav>
+
+    <div
+      class="hidden sm:flex flex-col items-start justify-start bg-bg/33 border border-primary/50 py-2 px-6 rounded-xl h-min"
     >
-    <div class="flex gap-x-4 text-lg">
-      {
-        links.map((link, i) => (
-          <>
-            <a
-              href={link.href}
-              class:list={[
-                "nav-link",
-                isActive(link.href) ? "text-primary" : "text-muted",
-              ]}
-            >
-              {link.label}
-            </a>
-            {i < links.length - 1 && <span class="text-muted">/</span>}
-          </>
-        ))
-      }
+      <label for="theme-selector" class="text-secondary">Site Theme:</label>
+      <select
+        name="theme-selector"
+        id="theme-selector"
+        class="text-primary bg-transparent"
+      >
+        <option value="normal-light">Normal — Light</option>
+        <option value="normal-dark">Normal — Dark</option>
+        <option value="amber-phosphor">Amber Phosphor</option>
+      </select>
     </div>
-  </nav>
+
+    <details id="mobile-nav" class="sm:hidden relative">
+      <summary
+        class="list-none cursor-pointer p-2 -mr-2 border border-primary/50 rounded-lg bg-bg/33 text-primary"
+        aria-label="Open navigation menu"
+      >
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="square"
+          aria-hidden="true"
+        >
+          <line x1="4" y1="7" x2="20" y2="7"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="17" x2="20" y2="17"></line>
+        </svg>
+      </summary>
+    </details>
+  </div>
 
   <div
-    class="flex flex-col items-start justify-start bg-bg/33 border border-primary/50 py-2 px-6 rounded-xl h-min"
+    id="mobile-panel"
+    class="sm:hidden hidden mt-4 flex-col gap-y-4 border border-primary/50 rounded-xl bg-bg/33 p-4"
   >
-    <label for="theme-selector" class="text-secondary">Site Theme:</label>
-    <select name="theme-selector" id="theme-selector" class="text-primary bg-transparent">
-      <option value="normal-light">Normal — Light</option>
-      <option value="normal-dark">Normal — Dark</option>
-      <option value="amber-phosphor">Amber Phosphor</option>
-    </select>
+    <nav class="flex flex-col gap-y-2 text-lg">
+      {
+        links.map((link) => (
+          <a
+            href={link.href}
+            class:list={[
+              "nav-link",
+              isActive(link.href) ? "text-primary" : "text-muted",
+            ]}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+    <div class="flex flex-col items-start">
+      <label for="theme-selector-mobile" class="text-secondary">Site Theme:</label>
+      <select
+        name="theme-selector-mobile"
+        id="theme-selector-mobile"
+        class="text-primary bg-transparent"
+      >
+        <option value="normal-light">Normal — Light</option>
+        <option value="normal-dark">Normal — Dark</option>
+        <option value="amber-phosphor">Amber Phosphor</option>
+      </select>
+    </div>
   </div>
 </header>
 
 <script>
-  function wireThemeSelector() {
-    const sel = document.getElementById("theme-selector") as HTMLSelectElement | null;
+  function wireThemeSelector(id: string) {
+    const sel = document.getElementById(id) as HTMLSelectElement | null;
     if (!sel) return;
 
-    const current = document.documentElement.getAttribute("data-theme") || "normal-light";
+    const current =
+      document.documentElement.getAttribute("data-theme") || "normal-light";
     sel.value = current;
 
     sel.onchange = () => {
@@ -63,12 +125,51 @@ const links = [
       try {
         localStorage.setItem("theme", next);
       } catch (_) {}
+      // Keep the other selector in sync
+      const others = document.querySelectorAll<HTMLSelectElement>(
+        "#theme-selector, #theme-selector-mobile"
+      );
+      others.forEach((o) => {
+        if (o !== sel) o.value = next;
+      });
       document.dispatchEvent(new CustomEvent("theme:changed", { detail: next }));
     };
   }
 
-  wireThemeSelector();
-  document.addEventListener("astro:after-swap", wireThemeSelector);
+  function wireMobileNav() {
+    const details = document.getElementById("mobile-nav") as HTMLDetailsElement | null;
+    const panel = document.getElementById("mobile-panel");
+    if (!details || !panel) return;
+
+    const sync = () => {
+      if (details.open) {
+        panel.classList.remove("hidden");
+        panel.classList.add("flex");
+      } else {
+        panel.classList.add("hidden");
+        panel.classList.remove("flex");
+      }
+    };
+
+    details.addEventListener("toggle", sync);
+    sync();
+
+    // Close the panel on link tap so navigation feels clean
+    panel.querySelectorAll("a").forEach((a) => {
+      a.addEventListener("click", () => {
+        details.open = false;
+      });
+    });
+  }
+
+  function init() {
+    wireThemeSelector("theme-selector");
+    wireThemeSelector("theme-selector-mobile");
+    wireMobileNav();
+  }
+
+  init();
+  document.addEventListener("astro:after-swap", init);
 </script>
 
 <style>
@@ -87,5 +188,13 @@ const links = [
   .nav-link.text-muted,
   .nav-link.text-muted:visited {
     color: var(--color-muted);
+  }
+
+  /* Hide the default disclosure triangle on Safari/iOS */
+  #mobile-nav > summary::-webkit-details-marker {
+    display: none;
+  }
+  #mobile-nav > summary {
+    list-style: none;
   }
 </style>
