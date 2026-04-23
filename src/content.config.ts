@@ -4,7 +4,7 @@ import { glob } from 'astro/loaders';
 const CONTENT_ROOT = process.env.CONTENT_ROOT ?? '../xandwr-content';
 
 const posts = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: `${CONTENT_ROOT}/posts` }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: `${CONTENT_ROOT}/posts` }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
@@ -16,7 +16,7 @@ const posts = defineCollection({
 });
 
 const projects = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: `${CONTENT_ROOT}/projects` }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: `${CONTENT_ROOT}/projects` }),
   schema: z.object({
     title: z.string(),
     description: z.string(),

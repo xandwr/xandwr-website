@@ -201,6 +201,13 @@ html[data-theme="amber-phosphor"] .astro-code {
   border-radius: 0.375rem;
 }
 
+.prose img {
+  display: block;
+  margin-inline: auto;
+  max-width: 100%;
+  height: auto;
+}
+
 #bg-canvas {
   position: fixed;
   inset: 0;
