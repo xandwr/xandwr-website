@@ -16,6 +16,7 @@ const posts = (await getCollection("posts", ({ data }) => !data.draft))
 ---
 
 <BaseLayout title="posts" description="xander's writing">
-  <h1>Posts</h1>
+  <h1 class="text-3xl mt-4 mb-2">Posts</h1>
+  <hr class="border-0 border-t border-rule/50 my-4 h-min" />
   <CardList items={posts} />
 </BaseLayout>
