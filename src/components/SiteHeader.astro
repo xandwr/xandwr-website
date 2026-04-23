@@ -10,26 +10,41 @@ const links = [
 ];
 ---
 
-<header class="h-min">
-  <nav class="text-muted text-sm flex flex-col gap-y-2">
-    <a href="/" class="nav-link text-4xl tracking-widest font-lighter text-fg font-special">xandwr</a>
+<header class="h-min flex flex-row">
+  <nav class="w-full text-muted text-sm flex flex-col gap-y-2">
+    <a
+      href="/"
+      class="nav-link text-4xl tracking-widest font-lighter text-fg font-special"
+      >xandwr</a
+    >
     <div class="flex gap-x-4 text-lg">
-      {links.map((link, i) => (
-        <>
-          <a
-            href={link.href}
-            class:list={[
-              "nav-link",
-              isActive(link.href) ? "text-primary" : "text-muted",
-            ]}
-          >
-            {link.label}
-          </a>
-          {i < links.length - 1 && <span class="text-muted">/</span>}
-        </>
-      ))}
+      {
+        links.map((link, i) => (
+          <>
+            <a
+              href={link.href}
+              class:list={[
+                "nav-link",
+                isActive(link.href) ? "text-primary" : "text-muted",
+              ]}
+            >
+              {link.label}
+            </a>
+            {i < links.length - 1 && <span class="text-muted">/</span>}
+          </>
+        ))
+      }
     </div>
   </nav>
+
+  <div class="flex flex-col  items-start justify-start bg-bg/33 border border-primary/50 py-2 px-6 rounded-xl h-min">
+    <h1 class="text-secondary">Site Theme:</h1>
+    <select name="theme-selector" id="theme-selector" class="text-primary">
+      <option value="normal-light">Normal - Light</option>
+      <option value="normal-dark">Normal - Dark</option>
+      <option value="amber-phosphor">Amber Phosphor</option>
+    </select>
+  </div>
 </header>
 
 <style>
