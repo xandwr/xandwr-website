@@ -1,11 +1,11 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PageTitle from "../components/PageTitle.astro";
 
 export const prerender = true;
 ---
 
 <BaseLayout description="xander">
-  <h1 class="text-3xl mt-4 mb-2">Home</h1>
-  <hr class="border-0 border-t border-rule/50 my-4 h-min" />
+  <PageTitle title="Home" />
   <div class="h-full w-full"></div>
 </BaseLayout>

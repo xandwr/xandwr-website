@@ -1,6 +1,7 @@
 ---
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageTitle from "../../components/PageTitle.astro";
 
 export const prerender = true;
 
@@ -11,22 +12,22 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props as { post: CollectionEntry<"posts"> };
 const { Content } = await render(post);
+const updated =
+  post.data.updated &&
+  post.data.updated.getTime() !== post.data.created.getTime()
+    ? post.data.updated
+    : null;
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description}>
-  <h1 class="text-3xl mt-4">{post.data.title}</h1>
-  <p class="text-muted text-base">
-    <time datetime={post.data.created.toISOString()}>
-      {post.data.created.toISOString().slice(0, 10)}
-    </time>
-    <hr class="border-0 border-t border-rule/50 my-2 h-min" />
-    {
-      post.data.updated &&
-        post.data.updated.getTime() !== post.data.created.getTime() && (
-          <> · updated {post.data.updated.toISOString().slice(0, 10)}</>
-        )
-    }
-  </p>
+  <PageTitle title={post.data.title}>
+    <Fragment slot="meta">
+      <time datetime={post.data.created.toISOString()}>
+        {post.data.created.toISOString().slice(0, 10)}
+      </time>
+      {updated && <> · updated {updated.toISOString().slice(0, 10)}</>}
+    </Fragment>
+  </PageTitle>
   <div class="prose">
     <Content />
   </div>

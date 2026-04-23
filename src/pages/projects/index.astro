@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import CardList from "../../components/CardList.astro";
+import PageTitle from "../../components/PageTitle.astro";
 
 export const prerender = true;
 
@@ -18,7 +19,6 @@ const projects = (
 ---
 
 <BaseLayout title="projects" description="Things Xander has built.">
-  <h1 class="text-3xl mt-4 mb-2">Projects</h1>
-  <hr class="border-0 border-t border-rule/50 my-4 h-min" />
+  <PageTitle title="Projects" />
   <CardList items={projects} />
 </BaseLayout>

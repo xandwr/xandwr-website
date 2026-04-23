@@ -1,6 +1,7 @@
 ---
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageTitle from "../../components/PageTitle.astro";
 
 export const prerender = true;
 
@@ -14,38 +15,24 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props as { project: CollectionEntry<"projects"> };
 const { Content } = await render(project);
+const updated =
+  project.data.updated &&
+  project.data.updated.getTime() !== project.data.created.getTime()
+    ? project.data.updated
+    : null;
 ---
 
 <BaseLayout title={project.data.title} description={project.data.description}>
-  <h1 class="text-3xl mt-4">{project.data.title}</h1>
-  <p class="text-muted text-base">
-    <time datetime={project.data.created.toISOString()}>
-      {project.data.created.toISOString().slice(0, 10)}
-    </time>
-    <hr class="border-0 border-t border-rule/50 my-4 h-min" />
-    {
-      project.data.updated &&
-        project.data.updated.getTime() !== project.data.created.getTime() && (
-          <> · updated {project.data.updated.toISOString().slice(0, 10)}</>
-        )
-    }
-    {
-      project.data.repo && (
-        <>
-          {" "}
-          · <a href={project.data.repo}>repo</a>
-        </>
-      )
-    }
-    {
-      project.data.url && (
-        <>
-          {" "}
-          · <a href={project.data.url}>live</a>
-        </>
-      )
-    }
-  </p>
+  <PageTitle title={project.data.title}>
+    <Fragment slot="meta">
+      <time datetime={project.data.created.toISOString()}>
+        {project.data.created.toISOString().slice(0, 10)}
+      </time>
+      {updated && <> · updated {updated.toISOString().slice(0, 10)}</>}
+      {project.data.repo && <> · <a href={project.data.repo}>repo</a></>}
+      {project.data.url && <> · <a href={project.data.url}>live</a></>}
+    </Fragment>
+  </PageTitle>
   <div class="prose">
     <Content />
   </div>
