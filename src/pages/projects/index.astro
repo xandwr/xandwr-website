@@ -1,0 +1,23 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CardList from "../../components/CardList.astro";
+
+export const prerender = true;
+
+const projects = (
+  await getCollection("projects", ({ data }) => !data.draft)
+)
+  .sort((a, b) => b.data.created.getTime() - a.data.created.getTime())
+  .map((project) => ({
+    href: `/projects/${project.id}/`,
+    title: project.data.title,
+    date: project.data.created,
+    description: project.data.description,
+  }));
+---
+
+<BaseLayout title="projects" description="Things Xander has built.">
+  <h1>Projects</h1>
+  <CardList items={projects} />
+</BaseLayout>

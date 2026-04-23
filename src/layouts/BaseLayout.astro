@@ -15,7 +15,7 @@ const fullTitle = title ? `${title} — xandwr` : "xandwr";
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <link rel="icon" href="/favicon.ico" />
     <title>{fullTitle}</title>
     {description && <meta name="description" content={description} />}
@@ -29,7 +29,8 @@ const fullTitle = title ? `${title} — xandwr` : "xandwr";
         <a href="/" class="text-xl font-semibold text-fg">xandwr</a>
         <div class="flex gap-x-4">
           <a href="/">home</a> /
-          <a href="/posts/">posts</a>
+          <a href="/posts/">posts</a> /
+          <a href="/projects/">projects</a>
         </div>
       </nav>
     </header>
