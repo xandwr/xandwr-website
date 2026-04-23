@@ -163,6 +163,38 @@ html[data-theme="normal-dark"] {
   font-family: var(--theme-font-special);
 }
 
+html[data-theme="normal-light"] .astro-code,
+html[data-theme="normal-light"] .astro-code span {
+  color: var(--shiki-light) !important;
+  background-color: var(--shiki-light-bg) !important;
+  font-style: var(--shiki-light-font-style) !important;
+  font-weight: var(--shiki-light-font-weight) !important;
+  text-decoration: var(--shiki-light-text-decoration) !important;
+}
+
+html[data-theme="normal-dark"] .astro-code,
+html[data-theme="normal-dark"] .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
+html[data-theme="amber-phosphor"] .astro-code,
+html[data-theme="amber-phosphor"] .astro-code span {
+  color: var(--theme-fg) !important;
+  background-color: transparent !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+}
+
+html[data-theme="amber-phosphor"] .astro-code {
+  background-color: color-mix(in srgb, var(--theme-fg) 6%, var(--theme-bg)) !important;
+  border: 1px solid var(--theme-rule);
+  padding: 0.75rem 1rem;
+}
+
 #bg-canvas {
   position: fixed;
   inset: 0;

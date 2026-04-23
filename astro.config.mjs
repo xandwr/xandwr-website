@@ -2,6 +2,8 @@
 import { defineConfig } from 'astro/config';
 import cloudflare from '@astrojs/cloudflare';
 import tailwindcss from '@tailwindcss/vite';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 
 import svelte from '@astrojs/svelte';
 
@@ -13,6 +15,18 @@ export default defineConfig({
 
   image: {
     domains: ['cdn.xandwr.com'],
+  },
+
+  markdown: {
+    remarkPlugins: [remarkMath],
+    rehypePlugins: [rehypeKatex],
+    shikiConfig: {
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
+      defaultColor: false,
+    },
   },
 
   vite: {
