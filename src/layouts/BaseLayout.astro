@@ -26,12 +26,18 @@ const fullTitle = title ? `${title} — xandwr` : "xandwr";
     <script is:inline>
       (function () {
         const valid = ["normal-light", "normal-dark", "amber-phosphor"];
-        let theme = null;
-        try {
-          theme = localStorage.getItem("theme");
-        } catch (_) {}
-        if (!valid.includes(theme)) theme = "normal-light";
-        document.documentElement.setAttribute("data-theme", theme);
+        const read = () => {
+          let t = null;
+          try {
+            t = localStorage.getItem("theme");
+          } catch (_) {}
+          return valid.includes(t) ? t : "normal-light";
+        };
+        const apply = (doc) => {
+          doc.documentElement.setAttribute("data-theme", read());
+        };
+        apply(document);
+        document.addEventListener("astro:before-swap", (e) => apply(e.newDocument));
       })();
     </script>
   </head>
