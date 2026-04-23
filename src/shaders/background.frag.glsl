@@ -4,18 +4,18 @@ out vec4 outColor;
 uniform vec2 iResolution;
 uniform float iTime;
 
-#define SPIN_ROTATION 0.5
-#define SPIN_SPEED 1.0
+#define SPIN_ROTATION 0.0
+#define SPIN_SPEED 0.5
 #define OFFSET vec2(0.0)
-#define COLOUR_1 vec4(0.0, 0.0, 0.02, 0.15)
-#define COLOUR_2 vec4(0.0, 0.2, 0.5, 0.50)
-#define COLOUR_3 vec4(0.0, 0.02, 0.15, 0.15)
-#define CONTRAST 3.0
+#define COLOUR_1 vec4(0.0, 0.0, 0.0, 0.0)
+#define COLOUR_2 vec4(0.6, 0.3, 0.1, 0.33)
+#define COLOUR_3 vec4(0.0, 0.0, 0.0, 0.0)
+#define CONTRAST 2.5
 #define LIGTHING 0.1
-#define SPIN_AMOUNT 0.5
-#define PIXEL_FILTER 720.0
-#define SPIN_EASE 0.5
-#define ZOOM 3.3
+#define SPIN_AMOUNT 1.0
+#define PIXEL_FILTER 340.0
+#define SPIN_EASE 0.33
+#define ZOOM 1.5
 #define PI 3.14159265359
 #define IS_ROTATE false
 

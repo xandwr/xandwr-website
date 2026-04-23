@@ -1,0 +1,52 @@
+---
+const { pathname } = Astro.url;
+const isActive = (href: string) =>
+  href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+const links = [
+  { href: "/", label: "home" },
+  { href: "/posts/", label: "posts" },
+  { href: "/projects/", label: "projects" },
+];
+---
+
+<header class="h-min">
+  <nav class="text-muted text-sm flex flex-col gap-y-2">
+    <a href="/" class="nav-link text-3xl font-semibold text-fg font-special">xandwr</a>
+    <div class="flex gap-x-4 text-lg">
+      {links.map((link, i) => (
+        <>
+          <a
+            href={link.href}
+            class:list={[
+              "nav-link",
+              isActive(link.href) ? "text-primary" : "text-muted",
+            ]}
+          >
+            {link.label}
+          </a>
+          {i < links.length - 1 && <span class="text-muted">/</span>}
+        </>
+      ))}
+    </div>
+  </nav>
+</header>
+
+<style>
+  .nav-link,
+  .nav-link:visited {
+    color: inherit;
+  }
+  .nav-link.text-fg,
+  .nav-link.text-fg:visited {
+    color: var(--color-fg);
+  }
+  .nav-link.text-primary,
+  .nav-link.text-primary:visited {
+    color: var(--color-primary);
+  }
+  .nav-link.text-muted,
+  .nav-link.text-muted:visited {
+    color: var(--color-muted);
+  }
+</style>

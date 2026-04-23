@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import { ClientRouter } from "astro:transitions";
+import SiteHeader from "../components/SiteHeader.astro";
 
 interface Props {
   title?: string;
@@ -24,20 +25,11 @@ const fullTitle = title ? `${title} — xandwr` : "xandwr";
     <ClientRouter />
   </head>
   <body
-    class="flex flex-col justify-between border-x shadow-xl shadow-black border-fg/20 h-screen max-w-xl mx-auto px-8 py-8 min-h-screen"
+    class="flex flex-col justify-between border-x bg-primary/10 shadow-xl shadow-secondary/50 border-secondary h-screen max-w-xl mx-auto px-8 py-8 min-h-screen"
   >
     <canvas id="bg-canvas" transition:persist></canvas>
 
-    <header class="h-min">
-      <nav class="text-muted text-sm flex flex-col gap-y-2">
-        <a href="/" class="text-xl font-semibold text-fg">xandwr</a>
-        <div class="flex gap-x-4">
-          <a href="/">home</a> /
-          <a href="/posts/">posts</a> /
-          <a href="/projects/">projects</a>
-        </div>
-      </nav>
-    </header>
+    <SiteHeader />
 
     <hr class="border-0 border-t border-rule/50 mt-8" />
 

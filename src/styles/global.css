@@ -1,28 +1,39 @@
 @import "tailwindcss";
 
-@theme {
-  --font-mono: ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
-  --color-fg: #1a1a1a;
-  --color-bg: #fafaf7;
-  --color-muted: #6a6a6a;
-  --color-rule: #aaaaa4;
+@font-face {
+  font-family: "CRT";
+  src: url("/fonts/crt.otf") format("opentype");
+  font-display: swap;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-fg: #cef3e5;
-    --color-bg: #1b161d;
-    --color-muted: #7aa4aa;
-    --color-rule: #e0dddd;
-  }
+@font-face {
+  font-family: "DOS";
+  src: url("/fonts/dos.ttf") format("truetype");
+  font-display: swap;
+}
+
+@theme {
+  --font-mono: "DOS", ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+  --font-special: "CRT", ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+  --color-fg: #ffb000;
+  --color-bg: #0a0604;
+  --color-muted: #a86b00;
+  --color-rule: #6a4400;
+  --color-primary: #ffcc33;
+  --color-secondary: #ff7a00;
+  --color-tertiary: #b88200;
 }
 
 html {
   font-family: var(--font-mono);
   color: var(--color-fg);
   background: var(--color-bg);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::after { animation: none; }
 }
 
 #bg-canvas {
@@ -33,7 +44,8 @@ html {
   z-index: -1;
   pointer-events: none;
   display: block;
-  filter: blur(30px);
+  filter: blur(0.33vw);
+  opacity: 30%;
 }
 
 a {
