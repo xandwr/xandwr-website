@@ -1,55 +1,47 @@
 #version 300 es
-precision highp float;
+precision mediump float;
 out vec4 outColor;
 uniform vec2 iResolution;
 uniform float iTime;
 
-#define SPIN_ROTATION 0.0
-#define SPIN_SPEED 0.5
-#define OFFSET vec2(0.0)
-#define COLOUR_1 vec4(0.0, 0.0, 0.0, 0.0)
-#define COLOUR_2 vec4(0.6, 0.3, 0.1, 0.33)
-#define COLOUR_3 vec4(0.0, 0.0, 0.0, 0.0)
-#define CONTRAST 2.5
-#define LIGTHING 0.1
-#define SPIN_AMOUNT 1.0
-#define PIXEL_FILTER 340.0
-#define SPIN_EASE 0.33
-#define ZOOM 1.5
-#define PI 3.14159265359
-#define IS_ROTATE false
-
-vec4 effect(vec2 screenSize, vec2 screen_coords) {
-  float pixel_size = length(screenSize.xy) / PIXEL_FILTER;
-  vec2 uv = (floor(screen_coords.xy*(1./pixel_size))*pixel_size - 0.5*screenSize.xy)/length(screenSize.xy) - OFFSET;
-  float uv_len = length(uv);
-
-  float speed = (SPIN_ROTATION*SPIN_EASE*0.2);
-  if (IS_ROTATE) { speed = iTime * speed; }
-  speed += 302.2;
-  float new_pixel_angle = atan(uv.y, uv.x) + speed - SPIN_EASE*20.*(1.*SPIN_AMOUNT*uv_len + (1. - 1.*SPIN_AMOUNT));
-  vec2 mid = (screenSize.xy/length(screenSize.xy))/2.;
-  uv = (vec2((uv_len * cos(new_pixel_angle) + mid.x), (uv_len * sin(new_pixel_angle) + mid.y)) - mid);
-
-  uv *= 30. / ZOOM;
-  speed = iTime*(SPIN_SPEED);
-  vec2 uv2 = vec2(uv.x+uv.y);
-
-  for (int i = 0; i < 5; i++) {
-    uv2 += sin(max(uv.x, uv.y)) + uv;
-    uv  += 0.5*vec2(cos(5.1123314 + 0.353*uv2.y + speed*0.131121), sin(uv2.x - 0.113*speed));
-    uv  -= 1.0*cos(uv.x + uv.y) - 1.0*sin(uv.x*0.711 - uv.y);
-  }
-
-  float contrast_mod = (0.25*CONTRAST + 0.5*SPIN_AMOUNT + 1.2);
-  float paint_res = min(2., max(0., length(uv)*(0.035)*contrast_mod));
-  float c1p = max(0., 1. - contrast_mod*abs(1.-paint_res));
-  float c2p = max(0., 1. - contrast_mod*abs(paint_res));
-  float c3p = 1. - min(1., c1p + c2p);
-  float light = (LIGTHING - 0.2)*max(c1p*5. - 4., 0.) + LIGTHING*max(c2p*5. - 4., 0.);
-  return (0.3/CONTRAST)*COLOUR_1 + (1. - 0.3/CONTRAST)*(COLOUR_1*c1p + COLOUR_2*c2p + vec4(c3p*COLOUR_3.rgb, c3p*COLOUR_1.a)) + light;
+float cosRange(float amt, float range, float minimum) {
+  return (((1.0 + cos(radians(amt))) * 0.5) * range) + minimum;
 }
 
 void main() {
-  outColor = effect(iResolution.xy, gl_FragCoord.xy);
+  const int zoom = 40;
+  const float brightness = 0.975;
+  vec2 fragCoord = gl_FragCoord.xy;
+  float time = iTime * 1.25;
+  vec2 uv = fragCoord / iResolution.xy;
+  vec2 p = (2.0 * fragCoord - iResolution.xy) / max(iResolution.x, iResolution.y);
+
+  float ct = cosRange(time * 5.0, 3.0, 1.1);
+  float xBoost = cosRange(time * 0.2, 5.0, 5.0);
+  float yBoost = cosRange(time * 0.1, 10.0, 5.0);
+  float fScale = cosRange(time * 15.5, 1.25, 0.5);
+
+  for (int i = 1; i < zoom; i++) {
+    float _i = float(i);
+    vec2 newp = p;
+    newp.x += 0.25 / _i * sin(_i * p.y + time * cos(ct) * 0.5 / 20.0 + 0.005 * _i) * fScale + xBoost;
+    newp.y += 0.25 / _i * sin(_i * p.x + time * ct * 0.3 / 40.0 + 0.03 * float(i + 15)) * fScale + yBoost;
+    p = newp;
+  }
+
+  float intensity = 0.5 * sin(3.0 * p.x) + 0.5 * sin(3.0 * p.y) + sin(p.x + p.y);
+  intensity = clamp(intensity * 0.5 + 0.5, 0.0, 1.0);
+
+  vec3 amberLow = vec3(0.09, 0.05, 0.02);
+  vec3 amberHigh = vec3(1.0, 0.69, 0.0);
+  vec3 col = mix(amberLow, amberHigh, intensity) * brightness;
+
+  float vigAmt = 5.0;
+  float vignette = (1.0 - vigAmt * (uv.y - 0.5) * (uv.y - 0.5))
+                 * (1.0 - vigAmt * (uv.x - 0.5) * (uv.x - 0.5));
+  float extrusion = (col.x + col.y + col.z) / 4.0;
+  extrusion *= 1.5;
+  extrusion *= vignette;
+
+  outColor = vec4(col, extrusion);
 }

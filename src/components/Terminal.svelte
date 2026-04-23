@@ -22,7 +22,7 @@
   }
 </script>
 
-<pre class="terminal" role="log" aria-live="polite">
+<pre class="terminal h-full" role="log" aria-live="polite">
   {#each lines as line (line.id)}<div class="line">{line.text}</div>{/each}
 </pre>
 

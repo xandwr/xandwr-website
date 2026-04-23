@@ -1,18 +1,9 @@
 ---
-import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Terminal from "../components/Terminal.svelte";
-import { signature } from "../data/signature";
 
 export const prerender = true;
-
-const posts = (await getCollection("posts", ({ data }) => !data.draft))
-  .sort((a, b) => b.data.created.getTime() - a.data.created.getTime())
-  .slice(0, 10);
 ---
 
 <BaseLayout description="xander">
-  <div class="h-full w-full">
-    <Terminal client:load initial={signature} />
-  </div>
+  <div class="h-full w-full"></div>
 </BaseLayout>
