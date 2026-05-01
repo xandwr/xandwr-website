@@ -25,17 +25,18 @@
 }
 
 @theme {
-  --font-mono: "DOS", ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+  --font-mono: "JetBrains Mono", Menlo, Consolas, monospace;
   --font-special: "CRT", ui-monospace, "JetBrains Mono", Menlo, Consolas, monospace;
+  --font-code: "DOS", ui-monospace, "JetBrains Mono", monospace;
   --font-digit-regular: "DigitRegular", monospace;
   --font-digit-bold: "DigitBold", monospace;
-  --color-fg: #ffb000;
-  --color-bg: #0a0604;
-  --color-muted: #a86b00;
-  --color-rule: #6a4400;
-  --color-primary: #ffcc33;
-  --color-secondary: #ff7a00;
-  --color-tertiary: #b88200;
+  --color-fg: #111111;
+  --color-bg: #ffffff;
+  --color-muted: #374151;
+  --color-rule: #e5e7eb;
+  --color-primary: #111111;
+  --color-secondary: #d1d5db;
+  --color-tertiary: #4b5563;
 }
 
 html {
@@ -50,18 +51,6 @@ html {
   body::after {
     animation: none;
   }
-}
-
-#bg-canvas {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;
-  pointer-events: none;
-  display: block;
-  filter: blur(0.33vw);
-  opacity: 30%;
 }
 
 a {
@@ -116,7 +105,7 @@ blockquote {
 }
 
 code {
-  font-family: inherit;
+  font-family: var(--font-code);
   font-size: 0.95em;
   background: var(--color-rule);
   padding: 0.1em 0.3em;
@@ -124,6 +113,7 @@ code {
 }
 
 pre {
+  font-family: var(--font-code);
   background: var(--color-rule);
   padding: 0.75rem 1rem;
   overflow-x: auto;
