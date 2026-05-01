@@ -14,6 +14,14 @@ const toCard = (collection: string) => (entry: any) => ({
   description: entry.data.description,
 });
 
+const birth = new Date("2003-06-24T00:00:00Z");
+const now = new Date();
+let age = now.getUTCFullYear() - birth.getUTCFullYear();
+const monthDiff = now.getUTCMonth() - birth.getUTCMonth();
+if (monthDiff < 0 || (monthDiff === 0 && now.getUTCDate() < birth.getUTCDate())) {
+  age -= 1;
+}
+
 const latestPosts = (await getCollection("posts", ({ data }) => !data.draft))
   .sort((a, b) => b.data.created.getTime() - a.data.created.getTime())
   .slice(0, LATEST_LIMIT)
@@ -26,6 +34,11 @@ const latestProjects = (await getCollection("projects", ({ data }) => !data.draf
 ---
 
 <BaseLayout description="xander">
+  <section class="mt-8">
+    <p>{age} and yapping in the edmonton frost</p>
+    <p>code lives on <a href="https://github.com/xandwr" target="_blank">github</a>.</p>
+  </section>
+
   <section class="mb-8">
     <div class="flex items-baseline justify-between mb-2">
       <h2>Latest posts</h2>
