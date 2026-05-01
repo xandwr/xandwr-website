@@ -1,6 +1,5 @@
 ---
 import "../styles/global.css";
-import { ClientRouter } from "astro:transitions";
 import SiteHeader from "../components/SiteHeader.astro";
 
 interface Props {
@@ -9,7 +8,8 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
-const fullTitle = title ? `${title} — xandwr` : "xandwr";
+const fullTitle = title ? `${title} - xandwr` : "xandwr";
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <!doctype html>
@@ -17,166 +17,28 @@ const fullTitle = title ? `${title} — xandwr` : "xandwr";
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <link rel="icon" href="/favicon.ico" />
     <title>{fullTitle}</title>
     {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title="xandwr" href="/rss.xml" />
+    <meta property="og:title" content={fullTitle} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
     <meta name="generator" content={Astro.generator} />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
-      integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
-      crossorigin="anonymous"
-    />
-    <ClientRouter />
-    <script is:inline>
-      (function () {
-        const valid = ["normal-light", "normal-dark", "amber-phosphor"];
-        const read = () => {
-          let t = null;
-          try {
-            t = localStorage.getItem("theme");
-          } catch (_) {}
-          return valid.includes(t) ? t : "normal-light";
-        };
-        const apply = (doc) => {
-          doc.documentElement.setAttribute("data-theme", read());
-        };
-        apply(document);
-        document.addEventListener("astro:before-swap", (e) => apply(e.newDocument));
-      })();
-    </script>
   </head>
-  <body
-    class="max-w-4xl site-frame flex flex-col mx-auto px-8 py-8 min-h-screen"
-  >
-    <canvas id="bg-canvas" transition:persist></canvas>
-
+  <body>
     <SiteHeader />
-
-    <hr class="border-0 border-t border-rule/50 mt-4" />
-
-    <main class="flex-1">
+    <main>
       <slot />
     </main>
-
-    <footer class="mt-2 h-min">
-      <hr class="border-0 border-t border-rule/50 my-2 h-min" />
-
-      <p class="text-muted text-lg flex justify-between h-min">
-        <a href="https://github.com/xandwr">github (@xandwr)</a><span
-          >© {new Date().getFullYear()}</span
-        >
+    <footer>
+      <hr />
+      <p>
+        <a href="https://github.com/xandwr">github (@xandwr)</a>
+        <span>(c) {new Date().getFullYear()}</span>
       </p>
     </footer>
-
-    <style>
-      .site-frame {
-        border-left: 1px solid color-mix(in srgb, var(--theme-secondary) calc(var(--theme-body-border-opacity) * 100%), transparent);
-        border-right: 1px solid color-mix(in srgb, var(--theme-secondary) calc(var(--theme-body-border-opacity) * 100%), transparent);
-        background: color-mix(in srgb, var(--theme-primary) calc(var(--theme-body-bg-opacity) * 100%), transparent);
-        box-shadow: var(--theme-body-shadow);
-      }
-    </style>
-
-    <script>
-      import vertSrc from "../shaders/background.vert.glsl?raw";
-      import fragSrc from "../shaders/background.frag.glsl?raw";
-
-      type ShaderCanvas = HTMLCanvasElement & {
-        __shaderInit?: boolean;
-        __shaderStop?: () => void;
-      };
-
-      function initShader() {
-        const canvas = document.getElementById("bg-canvas") as ShaderCanvas | null;
-        if (!canvas) return;
-
-        const theme = document.documentElement.getAttribute("data-theme");
-        const wantsShader = theme === "amber-phosphor";
-
-        if (!wantsShader) {
-          if (canvas.__shaderStop) canvas.__shaderStop();
-          canvas.__shaderInit = false;
-          return;
-        }
-
-        if (canvas.__shaderInit) return;
-
-        const gl = canvas.getContext("webgl2", {
-          antialias: false,
-          premultipliedAlpha: false,
-        });
-        if (!gl) return;
-
-        canvas.__shaderInit = true;
-
-        const compile = (type: number, src: string) => {
-          const s = gl.createShader(type)!;
-          gl.shaderSource(s, src);
-          gl.compileShader(s);
-          if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-            console.error(gl.getShaderInfoLog(s));
-          }
-          return s;
-        };
-
-        const prog = gl.createProgram()!;
-        gl.attachShader(prog, compile(gl.VERTEX_SHADER, vertSrc));
-        gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, fragSrc));
-        gl.linkProgram(prog);
-        gl.useProgram(prog);
-
-        const buf = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-        gl.bufferData(
-          gl.ARRAY_BUFFER,
-          new Float32Array([-1, -1, 3, -1, -1, 3]),
-          gl.STATIC_DRAW
-        );
-        const loc = gl.getAttribLocation(prog, "a_pos");
-        gl.enableVertexAttribArray(loc);
-        gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-
-        const uRes = gl.getUniformLocation(prog, "iResolution");
-        const uTime = gl.getUniformLocation(prog, "iTime");
-
-        const resize = () => {
-          const dpr = Math.min(window.devicePixelRatio || 1, 2);
-          const w = Math.floor(innerWidth * dpr);
-          const h = Math.floor(innerHeight * dpr);
-          if (canvas.width !== w || canvas.height !== h) {
-            canvas.width = w;
-            canvas.height = h;
-            gl.viewport(0, 0, w, h);
-          }
-        };
-        resize();
-        addEventListener("resize", resize);
-
-        const start = performance.now();
-        let rafId = 0;
-        let stopped = false;
-
-        const frame = () => {
-          if (stopped) return;
-          resize();
-          gl.uniform2f(uRes, canvas.width, canvas.height);
-          gl.uniform1f(uTime, (performance.now() - start) / 1000);
-          gl.drawArrays(gl.TRIANGLES, 0, 3);
-          rafId = requestAnimationFrame(frame);
-        };
-        rafId = requestAnimationFrame(frame);
-
-        canvas.__shaderStop = () => {
-          stopped = true;
-          cancelAnimationFrame(rafId);
-        };
-      }
-
-      initShader();
-      document.addEventListener("astro:after-swap", initShader);
-      document.addEventListener("theme:changed", initShader);
-    </script>
   </body>
 </html>

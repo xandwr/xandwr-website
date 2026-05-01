@@ -16,22 +16,12 @@
     "@astrojs/cloudflare": "^13.2.0",
     "@astrojs/mdx": "^5.0.4",
     "@astrojs/svelte": "^8.0.5",
-    "@tailwindcss/vite": "^4.2.4",
-    "@webtui/css": "^0.1.7",
     "astro": "^6.1.8",
-    "katex": "^0.16.45",
-    "rehype-katex": "^7.0.1",
-    "remark-math": "^6.0.0",
     "svelte": "^5.55.4",
-    "tailwindcss": "^4.2.4",
-    "three": "^0.184.0",
     "typescript": "^5.9.3",
     "wrangler": "^4.84.1"
   },
   "overrides": {
     "vite": "^7"
-  },
-  "devDependencies": {
-    "@types/three": "^0.184.0"
   }
 }

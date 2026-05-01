@@ -7,12 +7,11 @@ const { title } = Astro.props;
 const hasMeta = Astro.slots.has("meta");
 ---
 
-<h1 class="text-3xl mt-4 mb-2">{title}</h1>
+<h1>{title}</h1>
 {
   hasMeta && (
-    <p class="text-muted text-base">
+    <p class="post-meta">
       <slot name="meta" />
     </p>
   )
 }
-<hr class="border-0 border-t border-rule/50 my-4 h-min" />

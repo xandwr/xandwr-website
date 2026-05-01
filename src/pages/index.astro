@@ -1,11 +1,63 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import PageTitle from "../components/PageTitle.astro";
 
 export const prerender = true;
+
+const posts = (await getCollection("posts", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.created.getTime() - a.data.created.getTime())
+  .slice(0, 5);
+
+const projects = (await getCollection("projects", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.created.getTime() - a.data.created.getTime())
+  .slice(0, 5);
 ---
 
-<BaseLayout description="xander">
-  <PageTitle title="Home" />
-  <div class="h-full w-full"></div>
+<BaseLayout description="Xander Pickering's writing and projects.">
+  <p>
+    Code lives on <a href="https://github.com/xandwr">github</a>.
+  </p>
+
+  {
+    posts.length > 0 && (
+      <>
+        <h2>Recent posts</h2>
+        <ul class="entry-list">
+          {posts.map((post) => (
+            <li>
+              <h2>
+                <a href={`/posts/${post.id}/`}>{post.data.title}</a>
+              </h2>
+              <p class="meta">
+                <time datetime={post.data.created.toISOString()}>
+                  {post.data.created.toISOString().slice(0, 10)}
+                </time>
+                {post.data.description && <> - {post.data.description}</>}
+              </p>
+            </li>
+          ))}
+        </ul>
+        <p><a href="/posts/">All posts -&gt;</a></p>
+      </>
+    )
+  }
+
+  {
+    projects.length > 0 && (
+      <>
+        <h2>Recent projects</h2>
+        <ul class="entry-list">
+          {projects.map((project) => (
+            <li>
+              <h2>
+                <a href={`/projects/${project.id}/`}>{project.data.title}</a>
+              </h2>
+              <p class="meta">{project.data.description}</p>
+            </li>
+          ))}
+        </ul>
+        <p><a href="/projects/">All projects -&gt;</a></p>
+      </>
+    )
+  }
 </BaseLayout>
