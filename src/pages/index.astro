@@ -1,18 +1,44 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import Terminal from "../components/Terminal.svelte";
-import { signature } from "../data/signature";
+import CardList from "../components/CardList.astro";
 
 export const prerender = true;
 
-const posts = (await getCollection("posts", ({ data }) => !data.draft))
+const LATEST_LIMIT = 5;
+
+const toCard = (collection: string) => (entry: any) => ({
+  href: `/${collection}/${entry.id}/`,
+  title: entry.data.title,
+  date: entry.data.created,
+  description: entry.data.description,
+});
+
+const latestPosts = (await getCollection("posts", ({ data }) => !data.draft))
   .sort((a, b) => b.data.created.getTime() - a.data.created.getTime())
-  .slice(0, 10);
+  .slice(0, LATEST_LIMIT)
+  .map(toCard("posts"));
+
+const latestProjects = (await getCollection("projects", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.created.getTime() - a.data.created.getTime())
+  .slice(0, LATEST_LIMIT)
+  .map(toCard("projects"));
 ---
 
 <BaseLayout description="xander">
-  <div class="h-full w-full">
-    <Terminal client:load initial={signature} />
-  </div>
+  <section class="mb-8">
+    <div class="flex items-baseline justify-between mb-2">
+      <h2>Latest posts</h2>
+      <a href="/posts/" class="text-tertiary text-sm">all posts -&gt;</a>
+    </div>
+    <CardList items={latestPosts} emptyText="no posts yet" />
+  </section>
+
+  <section>
+    <div class="flex items-baseline justify-between mb-2">
+      <h2>Latest projects</h2>
+      <a href="/projects/" class="text-tertiary text-sm">all projects -&gt;</a>
+    </div>
+    <CardList items={latestProjects} emptyText="no projects yet" />
+  </section>
 </BaseLayout>
