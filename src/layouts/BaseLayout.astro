@@ -25,7 +25,7 @@ const fullTitle = title ? `${title} — xandwr` : "xandwr";
     <ClientRouter />
   </head>
   <body
-    class="max-w-4xl flex flex-col justify-between border-x bg-primary/10 shadow-xl shadow-secondary/50 border-secondary h-screen mx-auto px-8 py-8 min-h-screen"
+    class="max-w-4xl flex flex-col justify-between border-x bg-primary/10 shadow-xl shadow-secondary/50 border-secondary mx-auto px-8 py-8 min-h-screen"
   >
     <canvas id="bg-canvas" transition:persist></canvas>
 
@@ -33,7 +33,7 @@ const fullTitle = title ? `${title} — xandwr` : "xandwr";
 
     <hr class="border-0 border-t border-rule/50 mt-4" />
 
-    <main class="h-full">
+    <main class="flex-1">
       <slot />
     </main>
 
